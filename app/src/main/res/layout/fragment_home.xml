@@ -5,9 +5,12 @@
     tools:context="com.boomer.omer.ixonostest.Home">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <fragment
+        android:id="@+id/mapfragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        />
+
+
 
 </FrameLayout>
