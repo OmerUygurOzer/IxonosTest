@@ -1,4 +1,5 @@
-<resources>>
+<resources>
+
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowNoTitle">true</item>
@@ -12,6 +13,7 @@
 
     <style name="AppTheme.SignUp">
         <item name="android:textColorHint">@color/textColor</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TitleText">
@@ -24,5 +26,8 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 </resources>

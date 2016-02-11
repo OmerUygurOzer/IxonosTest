@@ -18,8 +18,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUp"
-            android:label="@string/title_activity_sign_up"
+            android:name=".Core"
+            android:label="@string/title_activity_core"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
