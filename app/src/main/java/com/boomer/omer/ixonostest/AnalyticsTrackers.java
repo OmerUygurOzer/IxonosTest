@@ -21,8 +21,8 @@ import java.util.Map;
 public final class AnalyticsTrackers {
 
   public enum Target {
-    APP,
-    // Add more trackers here if you need, and update the code in #get(Target) below
+    VIA_SPLASH,
+    VIA_LINK// Add more trackers here if you need, and update the code in #get(Target) below
   }
 
   private static AnalyticsTrackers sInstance;
@@ -57,7 +57,10 @@ public final class AnalyticsTrackers {
     if (!mTrackers.containsKey(target)) {
       Tracker tracker;
       switch (target) {
-        case APP:
+        case VIA_SPLASH:
+          tracker = GoogleAnalytics.getInstance(mContext).newTracker(R.xml.app_tracker);
+          break;
+        case VIA_LINK:
           tracker = GoogleAnalytics.getInstance(mContext).newTracker(R.xml.app_tracker);
           break;
         default:

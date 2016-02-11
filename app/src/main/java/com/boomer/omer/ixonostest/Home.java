@@ -1,12 +1,22 @@
 package com.boomer.omer.ixonostest;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 /**
@@ -27,21 +37,18 @@ public class Home extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    MapView mMapView;
+    private GoogleMap googleMap;
+
     private OnFragmentInteractionListener mListener;
+    private FragmentNotificationListener mNotificationListener;
+
+    TextView textViewAddress;
 
     public Home() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Home newInstance(String param1, String param2) {
         Home fragment = new Home();
         Bundle args = new Bundle();
@@ -58,16 +65,75 @@ public class Home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mNotificationListener = (FragmentNotificationListener)getActivity();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        // Inflate the layout for this fragment+
+        View v =  inflater.inflate(R.layout.fragment_home, container, false);
+
+        textViewAddress = (TextView)v.findViewById(R.id.textviewAddress);
+
+        mMapView = (MapView) v.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+
+        mMapView.onResume();// needed to get the map to display immediately
+
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        googleMap = mMapView.getMap();
+        // latitude and longitude
+        double latitude = 37.9000;
+        double longitude = 122.8000;
+
+        // create marker
+        MarkerOptions marker = new MarkerOptions().position(
+                new LatLng(latitude, longitude)).title("Hi Omer, this is my location");
+
+        // Changing marker icon
+        marker.icon(BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+
+        // adding marker
+        googleMap.addMarker(marker);
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude)).zoom(12).build();
+        googleMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(cameraPosition));
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -91,18 +157,16 @@ public class Home extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public void onNoInternet(){
+        mNotificationListener.createNotification("No internet connection");
+    }
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+
 }
+
+

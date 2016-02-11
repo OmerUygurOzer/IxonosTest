@@ -1,16 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.boomer.omer.ixonostest.Home">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <fragment
-        android:id="@+id/mapfragment"
+
+    <TextView
+        android:id="@+id/textviewAddress"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="wrap_content"
+        android:background="#DD000000"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="16dp" />
 
-
-
-</FrameLayout>
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

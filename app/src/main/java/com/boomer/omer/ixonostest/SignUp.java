@@ -1,12 +1,21 @@
 package com.boomer.omer.ixonostest;
 
+import android.app.Fragment;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import java.util.Random;
 
 
 /**
@@ -17,9 +26,8 @@ import android.view.ViewGroup;
  * Use the {@link SignUp#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignUp extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class SignUp extends Fragment implements View.OnClickListener {
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -28,20 +36,16 @@ public class SignUp extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private FragmentNotificationListener mNotificationListener;
 
-    public SignUp() {
-        // Required empty public constructor
-    }
+    private EditText editTextEmail;
+    private EditText editTextFirstName;
+    private EditText editTextLastName;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpp.
-     */
-    // TODO: Rename and change types and number of parameters
+    private Button buttonGo;
+
+    public SignUp() {}
+
     public static SignUp newInstance(String param1, String param2) {
         SignUp fragment = new SignUp();
         Bundle args = new Bundle();
@@ -58,21 +62,30 @@ public class SignUp extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+        mNotificationListener = (FragmentNotificationListener)getActivity();
+        mListener = (OnFragmentInteractionListener)getActivity();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
+
+        editTextEmail = (EditText)v.findViewById(R.id.editTextEmail);
+        editTextFirstName = (EditText)v.findViewById(R.id.editTextFistName);
+        editTextLastName = (EditText)v.findViewById(R.id.editTextLastName);
+
+        buttonGo = (Button)v.findViewById(R.id.buttonGo);
+        buttonGo.setOnClickListener(this);
+
+
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -91,18 +104,31 @@ public class SignUp extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.buttonGo){
+            if(!isValidEmail(editTextEmail.getText().toString())){
+                onInvalidEmail();
+            }
+        }
+
+
+        mListener.onFragmentInteraction(v.getId());
+    }
+
+    private void onInvalidEmail(){
+        mNotificationListener.createNotification("Email entered is invalid");
+    }
+
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(int viewID);
+    }
+
+    private static boolean isValidEmail(CharSequence email){
+        if (email==null){
+            return false;
+        }
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
