@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+import android.util.Log;
 
 
 public class Splash extends AppCompatActivity {
@@ -16,8 +16,13 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //Toast.makeText(this, getIntent().getData().toString(), Toast.LENGTH_LONG);
-        //Catch whether the app is laucnhed from link here
+        String data = "";
+        if(getIntent().getData()!=null){
+            data = getIntent().getData().toString();
+        }
+        Log.d("IX:",data);
+
+        //Catch whether the app is launched from link here
         initializeSplash();
 
     }

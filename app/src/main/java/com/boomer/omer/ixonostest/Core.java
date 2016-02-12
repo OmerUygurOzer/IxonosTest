@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.design.widget.NavigationView;
@@ -18,6 +17,8 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+
 import java.util.Random;
 
 public class Core extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,
@@ -25,6 +26,7 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
 
 
@@ -141,4 +144,6 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         int i = new Random().nextInt();
         notificationManager.notify(i, notification);
     }
+
+
 }
