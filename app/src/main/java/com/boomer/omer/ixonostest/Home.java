@@ -1,20 +1,17 @@
 package com.boomer.omer.ixonostest;
 
-import android.annotation.TargetApi;
+
 import android.app.Fragment;
 import android.content.Context;
-import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
+
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -34,14 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * create an instance of this fragment.
  */
 public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdate {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private MapView mMapView;
     private GoogleMap googleMap;
@@ -54,22 +44,10 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     public Home() {}
 
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         mNotificationListener = (FragmentNotificationListener)getActivity();
         geoServices = new GeoServices(getActivity());
         geoServices.addLocationUpdateListener(this);
@@ -104,7 +82,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment+
+
         View v =  inflater.inflate(R.layout.fragment_home, container, false);
 
         textViewAddress = (TextView)v.findViewById(R.id.textviewAddress);
@@ -112,7 +90,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
-        mMapView.onResume();// needed to get the map to display immediately
+        mMapView.onResume();
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {

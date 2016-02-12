@@ -33,7 +33,6 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
 
 
     private Context mContext;
-    private LocationManager locationManager;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -49,7 +48,6 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
         this.geocoder = new Geocoder(context, Locale.getDefault());
         this.mostRecentPoint.reset();
 
-        this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -116,8 +114,13 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
             mostRecentPoint.reset();
             mostRecentPoint.latitude = latitude;
             mostRecentPoint.longitute = longitute;
+            String adr = "";
             for(Address address:geoAddresses){
-                mostRecentPoint.addresses.add(address.getAddressLine(0));
+                int maxAdr = address.getMaxAddressLineIndex();
+                for(int i = 0 ; i< maxAdr; i++){
+                    adr +=address.getAddressLine(i) + " ";
+                }
+                mostRecentPoint.addresses.add(adr);
             }
 
             Log.d("GeoServices:", mostRecentPoint.addresses.size() + " addresses processed");
