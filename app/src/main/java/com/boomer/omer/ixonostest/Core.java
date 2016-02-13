@@ -166,6 +166,7 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
      * The user is taken to the About screen
      */
     private void selectedAbout(){
+        setTitle("");
         About about = new About();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentholder, about, "about");

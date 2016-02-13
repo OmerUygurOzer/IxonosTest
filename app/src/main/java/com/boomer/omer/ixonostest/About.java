@@ -66,9 +66,9 @@ public class About extends Fragment {
 
     /**
      * This method dynamically adjusts the location of the {@link TextView} s
-     * @param aboutTitle
-     * @param applicationVersion
-     * @param authorName
+     * @param aboutTitle title of the fragment
+     * @param applicationVersion application version
+     * @param authorName author's name
      */
     private void setMarginAndLayout(TextView aboutTitle,TextView applicationVersion,TextView authorName){
 
