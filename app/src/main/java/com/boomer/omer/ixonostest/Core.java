@@ -64,6 +64,8 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         mSessionManager = SessionManager.getInstance();
         if(mSessionManager.getUser()==null){
             launchSignUp();
+        }else{
+            selectedHome();
         }
 
     }
