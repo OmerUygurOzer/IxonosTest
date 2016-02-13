@@ -15,12 +15,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.Random;
 
@@ -30,11 +26,7 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
 
-    SessionManager sessionManager;
-
-
-    AnalyticsTrackers analyticsTrackers;
-
+    private SessionManager mSessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +45,10 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        sessionManager = SessionManager.getInstance();
-
-        AnalyticsTrackers.initialize(this);
-        analyticsTrackers = AnalyticsTrackers.getInstance();
-
+        mSessionManager = SessionManager.getInstance();
+        if(mSessionManager.getUser()==null){
+            launchSignUp();
+        }
 
     }
 
@@ -106,11 +97,7 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     @Override
-    public void onFragmentInteraction(int viewID) {
-        if(viewID == R.id.buttonGo){
-
-        }
-    }
+    public void onFragmentInteraction(int viewID) {}
 
     private void selectedHome(){
         Home home = new Home();
@@ -126,24 +113,25 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         fragmentTransaction.commit();
     }
 
-    private void selectedLogout(){
-        //Tracker tracker = analyticsTrackers.get(AnalyticsTrackers.Target.GREETING);
-        //tracker.setScreenName("Greeting");
-        //tracker.send(new HitBuilders.ScreenViewBuilder().build());
-
+    private void launchSignUp(){
         SignUp signUp = new SignUp();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentholder, signUp, "signup");
         fragmentTransaction.commit();
 
-        sessionManager.logoutCurrent();
+    }
 
+    private void selectedLogout(){
+        mSessionManager.logoutCurrent();
+        Intent i = new Intent(this,Splash.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
 
     @Override
     public void createNotification(String message) {
-        Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+        Intent notificationIntent = new Intent();
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this)
@@ -159,6 +147,9 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         int i = new Random().nextInt();
+
+        //RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.ixonosnotification)
+        //NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(this).setContent(remoteViews);
         notificationManager.notify(i, notification);
     }
 
@@ -173,7 +164,7 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
                 selectedAbout();
                 break;
             case NavigationController.SIGN_UP:
-                selectedLogout();
+               launchSignUp();
                 break;
             default:
                 break;

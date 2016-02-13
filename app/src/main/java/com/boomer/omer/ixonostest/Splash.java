@@ -7,8 +7,13 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 
 public class Splash extends AppCompatActivity {
+
+    Tracker mTracker;
 
     int splashWait = 0;
     CountDownTimer timer;
@@ -16,7 +21,8 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SessionManager.initialize(getApplicationContext());
+        Ixonos ixonos = (Ixonos)getApplication();
+        mTracker = ixonos.getDefaultTracker();
 
         setContentView(R.layout.activity_splash);
         //Determine application entry method
@@ -28,14 +34,13 @@ public class Splash extends AppCompatActivity {
         }else{
         }
 
-
-
         initializeSplash();
 
     }
 
     private void entryViaLink(){
-
+        mTracker.setScreenName("Entry via http link");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 

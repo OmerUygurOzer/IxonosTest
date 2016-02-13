@@ -3,12 +3,14 @@ package com.boomer.omer.ixonostest;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,15 +36,20 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
 
     private MapView mMapView;
-    private GoogleMap googleMap;
-    private GeoServices geoServices;
+    private GoogleMap mGoogleMap;
+    private GeoServices mGeoServices;
+    private WebServices mWebServices;
+
+    private SessionManager sessionManager;
+
 
     private OnFragmentInteractionListener mListener;
     private FragmentNotificationListener mNotificationListener;
     private NavigationController mNavigationController;
 
     TextView textViewAddress;
-    SessionManager sessionManager;
+
+
 
     public Home() {}
 
@@ -56,28 +63,48 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mNotificationListener = (FragmentNotificationListener)getActivity();
-        geoServices = new GeoServices(getActivity());
-        geoServices.addLocationUpdateListener(this);
+        mGeoServices = new GeoServices(getActivity());
+        mGeoServices.addLocationUpdateListener(this);
+        mWebServices = WebServices.getInstance();
         sessionManager = SessionManager.getInstance();
         mNavigationController = (NavigationController)getActivity();
+
         if(sessionManager.getUser()==null){
            noUserDataAvailable();
         }
+        if(!mWebServices.checkForConnection()){
+            onNoInternet();
+        }
+
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        mGeoServices.start();
+        if(!mGeoServices.checkForLocationSettings()){
+            Intent activateGPS = new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(activateGPS);
+        }
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        geoServices.stop();
+        mGeoServices.stop();
     }
 
     @Override
@@ -109,9 +136,9 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         } catch (Exception e) {
             e.printStackTrace();
         }
-        googleMap = mMapView.getMap();
-        googleMap.setOnMarkerClickListener(this);
-        geoServices.start();
+        mGoogleMap = mMapView.getMap();
+        mGoogleMap.setOnMarkerClickListener(this);
+
         return v;
     }
 
@@ -121,6 +148,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         mListener = null;
 
     }
+
 
     public void onNoInternet(){
         mNotificationListener.createNotification("No internet connection");
@@ -132,13 +160,13 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     @Override
     public void onReceiveLocationUpdate(GeoPoint geoPoint) {
-        googleMap.clear();
+        mGoogleMap.clear();
         MarkerOptions marker = new MarkerOptions().position(new LatLng(geoPoint.latitude, geoPoint.longitute)).title(geoPoint.addresses.get(1));
         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationpin));
-        googleMap.addMarker(marker);
+        mGoogleMap.addMarker(marker);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(geoPoint.latitude, geoPoint.longitute)).zoom(12).build();
-        googleMap.animateCamera(CameraUpdateFactory
+        mGoogleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
 
         textViewAddress.setText(geoPoint.addresses.get(1));

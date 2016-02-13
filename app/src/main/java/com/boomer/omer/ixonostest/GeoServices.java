@@ -4,12 +4,14 @@ package com.boomer.omer.ixonostest;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -160,9 +162,13 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
     }
 
     public boolean checkForLocationSettings(){
-
+        LocationManager locationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+           return false;
+        }
         return true;
     }
+
 
     public interface OnReceiveLocationUpdate{
         public void onReceiveLocationUpdate(GeoPoint geoPoint);

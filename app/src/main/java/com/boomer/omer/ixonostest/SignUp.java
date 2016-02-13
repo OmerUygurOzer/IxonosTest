@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.Random;
 
 
@@ -31,8 +34,9 @@ public class SignUp extends Fragment implements View.OnClickListener {
     private OnFragmentInteractionListener mListener;
     private FragmentNotificationListener mNotificationListener;
     private NavigationController mNavigationController;
+    private Tracker mTracker;
 
-    private SessionManager sessionManager;
+    private SessionManager mSessionManager;
 
     private EditText editTextEmail;
     private EditText editTextFirstName;
@@ -49,7 +53,14 @@ public class SignUp extends Fragment implements View.OnClickListener {
         mNotificationListener = (FragmentNotificationListener)getActivity();
         mListener = (OnFragmentInteractionListener)getActivity();
         mNavigationController = (NavigationController)getActivity();
-        sessionManager = SessionManager.getInstance();
+
+        mSessionManager = SessionManager.getInstance();
+
+        Ixonos ixonos = (Ixonos)getActivity().getApplication();
+        mTracker = ixonos.getDefaultTracker();
+
+        mTracker.setScreenName("Sign-Up Screen");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
@@ -97,7 +108,7 @@ public class SignUp extends Fragment implements View.OnClickListener {
                 String email = editTextEmail.getText().toString();
                 String fName = editTextFirstName.getText().toString();
                 String lName = editTextLastName.getText().toString();
-                sessionManager.signUp(email,fName,lName);
+                mSessionManager.signUp(email,fName,lName);
                 mNavigationController.navigateTo(NavigationController.HOME);
             }
         }
