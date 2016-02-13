@@ -6,6 +6,10 @@ import java.util.List;
 /**
  * Created by Omer on 2/11/2016.
  */
+
+/**
+ * This class is a simple representation of a Google Maps Point
+ */
 public class GeoPoint {
     public double latitude;
     public double longitute;

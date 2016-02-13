@@ -10,12 +10,18 @@ import android.util.Log;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-
+/**
+ * The splash screen for the application. Lasts 3 seconds and starts the {@link Core} activity in the end
+ */
 public class Splash extends AppCompatActivity {
 
     Tracker mTracker;
 
     int splashWait = 0;
+
+    /**
+     * {@link CountDownTimer} for the splash screen duration
+     */
     CountDownTimer timer;
 
     @Override
@@ -39,13 +45,18 @@ public class Splash extends AppCompatActivity {
 
     }
 
+    /**
+     * Get's called if the app entry was via an http link
+     */
     private void entryViaLink(){
         mTracker.setScreenName("Entry via http link");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         Log.d("Entry Point:","Via http link");
     }
 
-
+    /**
+     * Splash screen time is initialized
+     */
     private void initializeSplash() {
         splashWait = 3 *1000;  //3 Seconds default wait time
 
@@ -84,6 +95,9 @@ public class Splash extends AppCompatActivity {
         timer.cancel();
     }
 
+    /**
+     * Starts the {@link Core} Activity
+     */
     private void toCore() {
         Intent i = new Intent(this, Core.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

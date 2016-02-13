@@ -24,6 +24,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+/**
+ * The Fragment class that show the current user location if there is a user session active
+ * If not,the user is taken to the {@link SignUp} screen
+ */
 public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdate,GoogleMap.OnMarkerClickListener {
 
 
@@ -37,8 +41,16 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     private ActionbarHolder mActionbarHolder;
 
 
+
     private OnFragmentInteractionListener mListener;
+    /**
+     * This fragment can fire notifications through it's {@link FragmentNotificationListener}
+     */
     private FragmentNotificationListener mNotificationListener;
+
+    /**
+     * This fragment can change the navigation of the user through it's {@link NavigationController}
+     */
     private NavigationController mNavigationController;
 
     TextView textViewAddress;
@@ -55,6 +67,11 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     }
 
 
+    /**
+     * In this method if the {@link SessionManager} returns a null user , noUserDataAvailable method will be called
+     * Webservices is polled for an internet connection
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +102,9 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     }
 
+    /**
+     * If user session is available the tool bar title is updated
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -151,14 +171,25 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     }
 
 
+    /**
+     * The method that fires a notification for no internet
+     */
     public void onNoInternet(){
         mNotificationListener.createNotification("No internet connection");
     }
 
+    /**
+     * The method that navigates to the {@link SignUp} screen. Called when the {@link User} data is not available
+     * meaning the {@link SessionManager} did return a null User
+     */
     public void noUserDataAvailable(){
         mNavigationController.navigateTo(NavigationController.SIGN_UP);
     }
 
+    /**
+     * Updates the google maps with the incoming {@link GeoPoint}
+     * @param geoPoint GeoPoint that is sent from the {@link GeoServices}
+     */
     @Override
     public void onReceiveLocationUpdate(GeoPoint geoPoint) {
         mGoogleMap.clear();
@@ -179,7 +210,9 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         return false;
     }
 
-
+    /**
+     * Obsolete
+     */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

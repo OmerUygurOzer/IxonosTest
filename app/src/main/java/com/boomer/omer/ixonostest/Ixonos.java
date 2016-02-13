@@ -9,11 +9,20 @@ import com.google.android.gms.analytics.Tracker;
  * Created by Omer on 2/12/2016.
  */
 public class Ixonos extends Application{
+    /**
+     * Name of the application Author
+     */
     public static final String Author = "Omer Ozer";
 
-
+    /**
+     * Google Analytics tracker
+     */
     private Tracker mTracker;
 
+
+    /**
+     * {@link SessionManager} and {@link WebServices} are initialized here
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,6 +36,10 @@ public class Ixonos extends Application{
      */
 
 
+    /**
+     * A default tracker is created nad returned
+     * @return returns a defailt tracker
+     */
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);

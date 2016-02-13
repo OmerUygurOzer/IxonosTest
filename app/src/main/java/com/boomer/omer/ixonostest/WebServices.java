@@ -8,11 +8,26 @@ import android.util.Log;
 /**
  * Created by Omer on 2/12/2016.
  */
+
+/**
+ * Singleton class that is in-charge of checking for active internet connections
+ */
 public class WebServices {
 
+    /**
+     * The only instance that will be created. Will be shared when needed.
+     */
     private static WebServices sWebServices;
+
+    /**
+     * Current application context
+     */
     private static Context sContext;
 
+    /**
+     * Initializes the WebServices class.
+     * @param context Current application context required by the WebServices class;
+     */
     public static void initialize(Context context){
         sContext = context;
         sWebServices = new WebServices();

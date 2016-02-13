@@ -26,16 +26,40 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+
+/**
+ * This the core class that handles any and all fragment navigation ,notification generation, {@link Toolbar} title management
+ */
 public class Core extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,
         SignUp.OnFragmentInteractionListener,FragmentNotificationListener,NavigationController,ActionbarHolder{
 
+    /**
+     * The layout for the navigation drawer
+     */
     DrawerLayout drawerLayout;
+
+    /**
+     * Drawer Listener for the navigation drawer
+     */
     ActionBarDrawerToggle toggle;
 
+
+    /**
+     * Current active SessionManager
+     */
     private SessionManager mSessionManager;
 
+    /**
+     * The TextView that holds the title of the toolbar
+     */
     TextView mTitleHolder;
 
+
+    /**
+     * In onCreate of Core class, an instance for the Toolbar title is taken and given to the mTitleHolder {@link TextView}
+     * The {@link SessionManager} is instanced here. Navigation Drawer is set up here entirely.
+     * @param savedInstanceState currently save activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +116,11 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    /**
+     * This method manages menu selections of the Navigation Drawer
+     * @param item the selected menu item
+     * @return whether the menu selection was succesfully processed
+     */
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -114,9 +143,17 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    /**
+     * Obsolete
+     * @param viewID
+     */
     @Override
     public void onFragmentInteraction(int viewID) {}
 
+    /**
+     * This is the method that handles the selection of {@link Home}
+     * The user is taken to the Home screen
+     */
     private void selectedHome(){
         Home home = new Home();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -124,6 +161,10 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         fragmentTransaction.commit();
     }
 
+    /**
+     * This is the method that handles the selection of {@link About}
+     * The user is taken to the About screen
+     */
     private void selectedAbout(){
         About about = new About();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -131,6 +172,10 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         fragmentTransaction.commit();
     }
 
+    /**
+     * This is the method that handles the selection of {@link SignUp}
+     * The user is taken to the SignUp screen
+     */
     private void launchSignUp(){
         SignUp signUp = new SignUp();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -139,6 +184,11 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
+
+    /**
+     * This is the method that handles the selection of Logout
+     * The user is taken to the Splash screen and the current user data is erased
+     */
     private void selectedLogout(){
         mSessionManager.logoutCurrent();
         setTitle("");
@@ -148,6 +198,10 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
+    /**
+     * The method the creates heads-up notifications with the incoming message
+     * @param message The message that the {@link FragmentNotificationListener} will generate the notification for.
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void createNotification(String message) {
@@ -172,6 +226,10 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
+    /**
+     * This is the method that handles navigation orders
+     * @param destination the destination screen
+     */
     @Override
     public void navigateTo(int destination) {
         switch (destination){
@@ -189,6 +247,10 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    /**
+     * This is the method that changes the Action/Tool bar title
+     * @param title The title the action bar will hold
+     */
     @Override
     public void setTitle(String title) {
         mTitleHolder.setText(title);

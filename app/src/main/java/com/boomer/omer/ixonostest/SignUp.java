@@ -1,14 +1,8 @@
 package com.boomer.omer.ixonostest;
 
 import android.app.Fragment;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +15,21 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.Random;
 
 
-
+/**
+ * This Fragment class prompts the user all required text fields to collect data
+ * to create a {@link User}
+ */
 public class SignUp extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
+    /**
+     * This fragment can fire notifications through it's {@link FragmentNotificationListener}
+     */
     private FragmentNotificationListener mNotificationListener;
+
+    /**
+     * This fragment can change the navigation of the user through it's {@link NavigationController}
+     */
     private NavigationController mNavigationController;
     private Tracker mTracker;
 
@@ -110,6 +114,9 @@ public class SignUp extends Fragment implements View.OnClickListener {
         mListener.onFragmentInteraction(v.getId());
     }
 
+    /**
+     * Called when the entered e-mail is not a valid type.
+     */
     private void onInvalidEmail(){
         mNotificationListener.createNotification("Email entered is invalid");
     }
@@ -119,6 +126,9 @@ public class SignUp extends Fragment implements View.OnClickListener {
         void onFragmentInteraction(int viewID);
     }
 
+    /**
+     * Fires a notification when the entered email is not valid
+     */
     private static boolean isValidEmail(CharSequence email){
         if (email==null){
             return false;

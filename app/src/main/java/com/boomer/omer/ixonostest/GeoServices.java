@@ -31,20 +31,50 @@ import java.util.Locale;
 /**
  * Created by Omer on 2/11/2016.
  */
+
+/**
+ * This class handles all location data through GoogleAPiClient. GoogleAPIClient connects when this class is started and disconnects when stopped
+ */
 public class GeoServices implements LocationListener ,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,ActivityCompat.OnRequestPermissionsResultCallback{
 
 
+    /**
+     * Current application context
+     */
     private Context mContext;
 
+
+    /**
+     * GoogleAPiClient instance
+     */
     private GoogleApiClient mGoogleApiClient;
 
+
+    /**
+     * The most recent GeoPoint that is created
+     */
     private GeoPoint mostRecentPoint = new GeoPoint();
+
+    /**
+     *GeoCoder is required to generate the address from lat and long
+     */
     private Geocoder geocoder;
 
+    /**
+     * Whether {@Link GeoServices} is running
+     */
     private boolean running = false;
 
+    /**
+     * List of all class instances that listen the GeoServices
+     */
     private List<OnReceiveLocationUpdate> updateListeners = new ArrayList<>();
 
+
+    /**
+     * Constructor that creates the Google API client
+     * @param context current application context that is required by the GeoServices
+     */
     public GeoServices(Context context) {
         this.mContext = context;
         this.geocoder = new Geocoder(context, Locale.getDefault());
@@ -62,26 +92,41 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
 
     }
 
+    /**
+     * Starts the GeoServices. Updates are now being listened to.
+     */
     public void start(){
         mGoogleApiClient.connect();
         running = true;
     }
 
+    /**
+     * Stops the GeoServices
+     */
     public void stop(){
         mGoogleApiClient.disconnect();
         running = false;
     }
 
 
-
+ /**
+  *Called when the location of the user changes
+  */
     @Override
     public void onLocationChanged(Location location) {
        processLocation(location);
     }
 
-
+    /**
+     *
+     * @return returns the most recent point that is updated by the GeoServices
+     */
     public GeoPoint getMostRecentPoint(){return mostRecentPoint;}
 
+    /**
+     * Call back for when the connection actually happens
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
         requestLocationServices();
@@ -89,6 +134,11 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
         Log.d("GeoServices:", "Connection success");
     }
 
+
+    /**
+     * Requests location services from the user.
+     * @return returns true if permissions are granted
+     */
     public boolean requestLocationServices(){
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){return false;}
         LocationRequest locationRequest = LocationRequest.create();
@@ -100,6 +150,10 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
         return true;
     }
 
+    /**
+     * Process a location data and generates a {@Link GeoPoint}
+     * @param location {@link Location}  needed to generate a GeoPoint
+     */
     private void processLocation(Location location){
         if(location==null){return;}
         double latitude;
@@ -134,12 +188,20 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
         Log.d("GeoServices:", "Location processed");
     }
 
+    /**
+     * Call back for when the connection is suspended
+     * @param i data from GoogleApiClient
+     */
     @Override
     public void onConnectionSuspended(int i) {
         running = false;
         Log.d("GeoServices:", "Connection suspended");
     }
 
+    /**
+     * Callback for when the connection fails
+     * @param connectionResult result of the connection in data
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d("GeoServices:", "Connection failed");
@@ -151,16 +213,28 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
 
     }
 
+    /**
+     * Notifies all the listeners by sending them the most recent {@link GeoPoint}
+     * @param geoPoint
+     */
     public void notifyListeners(GeoPoint geoPoint){
         for(OnReceiveLocationUpdate listener:updateListeners){
             listener.onReceiveLocationUpdate(geoPoint);
         }
     }
 
+    /**
+     * Adds a {@link com.boomer.omer.ixonostest.GeoServices.OnReceiveLocationUpdate} to the GeoServices
+     * @param onReceiveLocationUpdate
+     */
     public void addLocationUpdateListener(OnReceiveLocationUpdate onReceiveLocationUpdate){
         updateListeners.add(onReceiveLocationUpdate);
     }
 
+    /**
+     * Checks whether the location settings are enables
+      * @return returns whether the location settings are enables
+     */
     public boolean checkForLocationSettings(){
         LocationManager locationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -170,6 +244,9 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
     }
 
 
+    /**
+     * The interface for update listeners to GeoServices
+     */
     public interface OnReceiveLocationUpdate{
         public void onReceiveLocationUpdate(GeoPoint geoPoint);
     }
