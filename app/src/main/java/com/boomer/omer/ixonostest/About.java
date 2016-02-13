@@ -2,72 +2,71 @@ package com.boomer.omer.ixonostest;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.IccOpenLogicalChannelResponse;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link About.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link About#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class About extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public About() {}
 
-
-
-    public About() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment About.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static About newInstance(String param1, String param2) {
-        About fragment = new About();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        View v =inflater.inflate(R.layout.fragment_about, container, false);
+        TextView aboutTitle = (TextView)v.findViewById(R.id.aboutTitle);
+        TextView applicationVersion = (TextView)v.findViewById(R.id.applicationVersion);
+        TextView authorName = (TextView)v.findViewById(R.id.authorName);
+
+        try {
+            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            String version = pInfo.versionName;
+            applicationVersion.setText("Application version <"+version+">");
+            authorName.setText("Author <"+ Ixonos.Author + ">");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        setMarginAndLayout(aboutTitle, applicationVersion, authorName);
+
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
+    private void setMarginAndLayout(TextView aboutTitle,TextView applicationVersion,TextView authorName){
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int deviceHeight = displayMetrics.heightPixels;
+
+        LinearLayout.LayoutParams parammsComponent = (LinearLayout.LayoutParams) aboutTitle.getLayoutParams();
+        parammsComponent.topMargin = (int)(deviceHeight * 0.08f);
+        aboutTitle.setLayoutParams(parammsComponent);
+
+        parammsComponent = (LinearLayout.LayoutParams) applicationVersion.getLayoutParams();
+        parammsComponent.topMargin = (int)(deviceHeight * 0.06f);
+        applicationVersion.setLayoutParams(parammsComponent);
+
+        parammsComponent = (LinearLayout.LayoutParams) authorName.getLayoutParams();
+        parammsComponent.topMargin = (int)(deviceHeight * 0.03f);
+        authorName.setLayoutParams(parammsComponent);
+    }
 
 
     @Override

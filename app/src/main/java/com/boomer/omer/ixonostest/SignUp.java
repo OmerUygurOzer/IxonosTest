@@ -21,14 +21,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.Random;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SignUp.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SignUp#} factory method to
- * create an instance of this fragment.
- */
+
 public class SignUp extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
@@ -71,7 +64,7 @@ public class SignUp extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         editTextEmail = (EditText)v.findViewById(R.id.editTextEmail);
-        editTextFirstName = (EditText)v.findViewById(R.id.editTextFistName);
+        editTextFirstName = (EditText)v.findViewById(R.id.editTextFirstName);
         editTextLastName = (EditText)v.findViewById(R.id.editTextLastName);
 
         buttonGo = (Button)v.findViewById(R.id.buttonGo);

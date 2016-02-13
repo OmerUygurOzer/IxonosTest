@@ -9,6 +9,9 @@ import com.google.android.gms.analytics.Tracker;
  * Created by Omer on 2/12/2016.
  */
 public class Ixonos extends Application{
+    public static final String Author = "Omer Ozer";
+
+
     private Tracker mTracker;
 
     @Override

@@ -24,14 +24,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Home.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Home#} factory method to
- * create an instance of this fragment.
- */
 public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdate,GoogleMap.OnMarkerClickListener {
 
 
@@ -40,7 +32,9 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     private GeoServices mGeoServices;
     private WebServices mWebServices;
 
-    private SessionManager sessionManager;
+    private SessionManager mSessionManager;
+
+    private ActionbarHolder mActionbarHolder;
 
 
     private OnFragmentInteractionListener mListener;
@@ -49,6 +43,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     TextView textViewAddress;
 
+    private User mUser;
 
 
     public Home() {}
@@ -63,20 +58,23 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mNotificationListener = (FragmentNotificationListener)getActivity();
         mGeoServices = new GeoServices(getActivity());
         mGeoServices.addLocationUpdateListener(this);
         mWebServices = WebServices.getInstance();
-        sessionManager = SessionManager.getInstance();
+        mSessionManager = SessionManager.getInstance();
         mNavigationController = (NavigationController)getActivity();
+        mActionbarHolder = (ActionbarHolder)getActivity();
 
-        if(sessionManager.getUser()==null){
+        if(mSessionManager.getUser()==null){
            noUserDataAvailable();
         }
         if(!mWebServices.checkForConnection()){
             onNoInternet();
         }
+
+
+
 
     }
 
@@ -97,6 +95,9 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
                     android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(activateGPS);
         }
+
+        mUser = mSessionManager.getUser();
+        if(mUser!=null)mActionbarHolder.setTitle(mUser.firstName + " " + mUser.lastName);
 
     }
 

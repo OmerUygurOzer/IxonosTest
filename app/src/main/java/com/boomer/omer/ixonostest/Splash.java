@@ -28,10 +28,11 @@ public class Splash extends AppCompatActivity {
         //Determine application entry method
         Uri data = getIntent().getData();
         if(data !=null){
-            if(data.getScheme().equals("ixonos.test")){
+            if(data.getScheme().equals("http")){
                 entryViaLink();
             }
         }else{
+            Log.d("Entry Point:","Regular Launch");
         }
 
         initializeSplash();
@@ -41,6 +42,7 @@ public class Splash extends AppCompatActivity {
     private void entryViaLink(){
         mTracker.setScreenName("Entry via http link");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        Log.d("Entry Point:","Via http link");
     }
 
 

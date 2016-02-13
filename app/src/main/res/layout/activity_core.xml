@@ -21,6 +21,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:itemBackground="@drawable/nd_bg_selector"
+        app:itemIconTint="@color/nd_menu_text_selector"
+        app:itemTextColor="@color/nd_menu_text_selector"
         app:headerLayout="@layout/nav_header_core"
         app:menu="@menu/activity_core_drawer">
         <RelativeLayout

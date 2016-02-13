@@ -1,3 +1,10 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".SignUp">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -37,13 +44,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittextbackground"
-        android:id="@+id/editTextFistName"
+        android:id="@+id/editTextFirstName"
         android:layout_marginTop="@dimen/signup_row_horizontal_margin"
         android:paddingLeft="@dimen/signup_edittext_padding"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/editTextEmail"
         android:layout_alignParentStart="true"
-        android:hint="@string/last_name"
+        android:hint="@string/first_name"
         android:theme="@style/AppTheme.SignUp"
         android:textColor="@color/textColor" />
 
@@ -55,9 +62,9 @@
         android:layout_marginTop="@dimen/signup_row_horizontal_margin"
         android:paddingLeft="@dimen/signup_edittext_padding"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/editTextFistName"
+        android:layout_below="@+id/editTextFirstName"
         android:layout_alignParentStart="true"
-        android:hint="@string/first_name"
+        android:hint="@string/last_name"
         android:theme="@style/AppTheme.SignUp"
         android:textColor="@color/textColor" />
 
@@ -70,4 +77,5 @@
         android:layout_below="@+id/editTextLastName"
         android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
