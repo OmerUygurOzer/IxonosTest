@@ -11,4 +11,5 @@
 
  * Written in Android Studio, so all build files are in gradle and are uploaded here.
  * For Google analytics dashboard access , you can click on the link that has been sent to you.
+ * Refer the in-code comments for more details
  
