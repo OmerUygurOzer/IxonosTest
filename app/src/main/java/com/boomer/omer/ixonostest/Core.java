@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 
@@ -24,13 +25,16 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.Random;
 
 public class Core extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,
-        SignUp.OnFragmentInteractionListener,FragmentNotificationListener{
+        SignUp.OnFragmentInteractionListener,FragmentNotificationListener,NavigationController{
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
 
+    SessionManager sessionManager;
+
 
     AnalyticsTrackers analyticsTrackers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        sessionManager = SessionManager.getInstance();
 
         AnalyticsTrackers.initialize(this);
         analyticsTrackers = AnalyticsTrackers.getInstance();
@@ -121,14 +127,17 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void selectedLogout(){
-        Tracker tracker = analyticsTrackers.get(AnalyticsTrackers.Target.GREETING);
-        tracker.setScreenName("Greeting");
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        //Tracker tracker = analyticsTrackers.get(AnalyticsTrackers.Target.GREETING);
+        //tracker.setScreenName("Greeting");
+        //tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         SignUp signUp = new SignUp();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentholder, signUp, "signup");
         fragmentTransaction.commit();
+
+        sessionManager.logoutCurrent();
+
     }
 
 
@@ -154,4 +163,20 @@ public class Core extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
+    @Override
+    public void navigateTo(int destination) {
+        switch (destination){
+            case NavigationController.HOME:
+                selectedHome();
+                break;
+            case NavigationController.ABOUT:
+                selectedAbout();
+                break;
+            case NavigationController.SIGN_UP:
+                selectedLogout();
+                break;
+            default:
+                break;
+        }
+    }
 }

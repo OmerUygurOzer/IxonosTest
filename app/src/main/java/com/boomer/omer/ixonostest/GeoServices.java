@@ -99,6 +99,7 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
     }
 
     private void processLocation(Location location){
+        if(location==null){return;}
         double latitude;
         double longitute;
         latitude = location.getLatitude();

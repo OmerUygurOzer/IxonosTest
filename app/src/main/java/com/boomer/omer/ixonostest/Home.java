@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -19,6 +18,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -27,10 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Activities that contain this fragment must implement the
  * {@link Home.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Home#newInstance} factory method to
+ * Use the {@link Home#} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdate {
+public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdate,GoogleMap.OnMarkerClickListener {
 
 
     private MapView mMapView;
@@ -39,10 +39,18 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     private OnFragmentInteractionListener mListener;
     private FragmentNotificationListener mNotificationListener;
+    private NavigationController mNavigationController;
 
     TextView textViewAddress;
+    SessionManager sessionManager;
 
     public Home() {}
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
 
 
     @Override
@@ -51,7 +59,11 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         mNotificationListener = (FragmentNotificationListener)getActivity();
         geoServices = new GeoServices(getActivity());
         geoServices.addLocationUpdateListener(this);
-
+        sessionManager = SessionManager.getInstance();
+        mNavigationController = (NavigationController)getActivity();
+        if(sessionManager.getUser()==null){
+            mNavigationController.navigateTo(NavigationController.SIGN_UP);
+        }
     }
 
 
@@ -97,6 +109,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
             e.printStackTrace();
         }
         googleMap = mMapView.getMap();
+        googleMap.setOnMarkerClickListener(this);
         geoServices.start();
         return v;
     }
@@ -107,16 +120,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+
 
     @Override
     public void onDetach() {
@@ -133,9 +137,8 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     @Override
     public void onReceiveLocationUpdate(GeoPoint geoPoint) {
-        //googleMap.clear();
+        googleMap.clear();
         MarkerOptions marker = new MarkerOptions().position(new LatLng(geoPoint.latitude, geoPoint.longitute)).title(geoPoint.addresses.get(1));
-
         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationpin));
         googleMap.addMarker(marker);
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -145,6 +148,13 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
         textViewAddress.setText(geoPoint.addresses.get(1));
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+        return false;
+    }
+
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

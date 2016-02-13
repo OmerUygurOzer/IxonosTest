@@ -15,6 +15,8 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SessionManager.initialize(getApplicationContext());
+
         setContentView(R.layout.activity_splash);
         String data = "";
         if(getIntent().getData()!=null){
@@ -66,9 +68,7 @@ public class Splash extends AppCompatActivity {
     }
 
     private void toCore() {
-
-        Intent i = null;
-        i = new Intent(this, Core.class);
+        Intent i = new Intent(this, Core.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();

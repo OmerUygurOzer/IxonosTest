@@ -23,20 +23,16 @@ import java.util.Random;
  * Activities that contain this fragment must implement the
  * {@link SignUp.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SignUp#newInstance} factory method to
+ * Use the {@link SignUp#} factory method to
  * create an instance of this fragment.
  */
 public class SignUp extends Fragment implements View.OnClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
     private FragmentNotificationListener mNotificationListener;
+    private NavigationController mNavigationController;
+
+    private SessionManager sessionManager;
 
     private EditText editTextEmail;
     private EditText editTextFirstName;
@@ -46,26 +42,14 @@ public class SignUp extends Fragment implements View.OnClickListener {
 
     public SignUp() {}
 
-    public static SignUp newInstance(String param1, String param2) {
-        SignUp fragment = new SignUp();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
 
         mNotificationListener = (FragmentNotificationListener)getActivity();
         mListener = (OnFragmentInteractionListener)getActivity();
+        mNavigationController = (NavigationController)getActivity();
+        sessionManager = SessionManager.getInstance();
 
     }
 
@@ -109,6 +93,12 @@ public class SignUp extends Fragment implements View.OnClickListener {
         if(v.getId() == R.id.buttonGo){
             if(!isValidEmail(editTextEmail.getText().toString())){
                 onInvalidEmail();
+            }else{
+                String email = editTextEmail.getText().toString();
+                String fName = editTextFirstName.getText().toString();
+                String lName = editTextLastName.getText().toString();
+                sessionManager.signUp(email,fName,lName);
+                mNavigationController.navigateTo(NavigationController.HOME);
             }
         }
 
