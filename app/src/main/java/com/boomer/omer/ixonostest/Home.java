@@ -62,7 +62,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         sessionManager = SessionManager.getInstance();
         mNavigationController = (NavigationController)getActivity();
         if(sessionManager.getUser()==null){
-            mNavigationController.navigateTo(NavigationController.SIGN_UP);
+           noUserDataAvailable();
         }
     }
 
@@ -115,14 +115,6 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
         return v;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -130,10 +122,12 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
 
     }
 
-
-
     public void onNoInternet(){
         mNotificationListener.createNotification("No internet connection");
+    }
+
+    public void noUserDataAvailable(){
+        mNavigationController.navigateTo(NavigationController.SIGN_UP);
     }
 
     @Override

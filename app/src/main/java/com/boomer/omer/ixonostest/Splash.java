@@ -26,7 +26,6 @@ public class Splash extends AppCompatActivity {
                 entryViaLink();
             }
         }else{
-            regularEntry();
         }
 
 
@@ -39,9 +38,6 @@ public class Splash extends AppCompatActivity {
 
     }
 
-    private void regularEntry(){
-
-    }
 
     private void initializeSplash() {
         splashWait = 3 *1000;  //3 Seconds default wait time

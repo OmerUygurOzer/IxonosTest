@@ -159,6 +159,11 @@ public class GeoServices implements LocationListener ,GoogleApiClient.Connection
         updateListeners.add(onReceiveLocationUpdate);
     }
 
+    public boolean checkForLocationSettings(){
+
+        return true;
+    }
+
     public interface OnReceiveLocationUpdate{
         public void onReceiveLocationUpdate(GeoPoint geoPoint);
     }
