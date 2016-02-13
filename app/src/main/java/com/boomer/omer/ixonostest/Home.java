@@ -77,6 +77,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     public void onPause() {
         super.onPause();
         mMapView.onPause();
+        geoServices.stop();
     }
 
     @Override
@@ -126,7 +127,7 @@ public class Home extends Fragment implements GeoServices.OnReceiveLocationUpdat
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        geoServices.stop();
+
     }
 
 

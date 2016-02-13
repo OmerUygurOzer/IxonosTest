@@ -1,6 +1,7 @@
 package com.boomer.omer.ixonostest;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -18,14 +19,27 @@ public class Splash extends AppCompatActivity {
         SessionManager.initialize(getApplicationContext());
 
         setContentView(R.layout.activity_splash);
-        String data = "";
-        if(getIntent().getData()!=null){
-            data = getIntent().getData().toString();
+        //Determine application entry method
+        Uri data = getIntent().getData();
+        if(data !=null){
+            if(data.getScheme().equals("ixonos.test")){
+                entryViaLink();
+            }
+        }else{
+            regularEntry();
         }
-        Log.d("IX:",data);
 
-        //Catch whether the app is launched from link here
+
+
         initializeSplash();
+
+    }
+
+    private void entryViaLink(){
+
+    }
+
+    private void regularEntry(){
 
     }
 
