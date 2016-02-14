@@ -9,6 +9,8 @@
 
  * For the usage, refer to the provided .pdf file. The exact UI flow has been implemented. 
 
+ * Refer to IxonosChallengeTaskingDoc.pdf for detailed explanation of the whole project
+
  * Written in Android Studio, so all build files are in gradle and are uploaded here.
  * For Google analytics dashboard access , you can click on the link that has been sent to you.
  
